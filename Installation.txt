@@ -1,0 +1,65 @@
+Installation
+
+
+Start by updating the system packages:
+
+
+$ sudo apt update
+Install the required dependencies:
+
+bash
+Copy code
+$ sudo apt install ros-noetic-joy ros-noetic-octomap-ros ros-noetic-mavlink
+$ sudo apt install ros-noetic-octomap-mapping ros-noetic-control-toolbox
+$ sudo apt install python3-vcstool python3-catkin-tools protobuf-compiler libgoogle-glog-dev
+$ rosdep update
+$ sudo apt-get install ros-noetic-ros libgoogle-glog-dev
+Create a new ROS workspace and download the required packages:
+
+
+$ mkdir -p ~/rbe502_project/src
+$ cd ~/rbe502_project/src
+$ catkin_init_workspace
+$ cd ~/rbe502_project
+$ catkin init
+$ cd ~/rbe502_project/src
+$ git clone -b dev/ros-noetic https://github.com/gsilano/CrazyS.git
+$ git clone -b med18_gazebo9 https://github.com/gsilano/mav_comm.git
+Configure the workspace using python_catkin_tools:
+
+
+$ cd ~/rbe502_project
+$ rosdep install --from-paths src -i
+$ rosdep update
+$ catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release -DCATKIN_ENABLE_TESTING=False
+$ catkin build
+Add sourcing to the .bashrc file:
+
+
+$ echo "source ~/rbe502_project/devel/setup.bash" >> ~/.bashrc
+$ source ~/.bashrc
+
+
+Usage
+Build the ROS package:
+
+
+$ cd ~/rbe502_project
+$ catkin build
+Spawn the quadrotor in Gazebo:
+
+
+$ roslaunch rotors_gazebo crazyflie2_without_controller.launch
+Make sure to start the Gazebo simulation by clicking on the play button.
+
+Run the control script to track the desired trajectories and waypoints:
+
+
+$ rosrun <package_name> <script_name>.py
+Replace <package_name> with the name of your ROS package and <script_name> with the name of your Python script implementing the sliding mode control.
+
+After the simulation is complete, visualize the actual trajectories using the saved log file:
+
+
+$ rosrun <package_name> visualize.py
+This script will plot the actual trajectories on top of the reference trajectories in a 3D plot.
